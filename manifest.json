@@ -13,8 +13,8 @@
                 "changelog": "Settings page in the dashboard; in-process reconnect proxy; default reconnect window 300s.",
                 "targetAbi": "10.11.0.0",
                 "sourceUrl": "https://github.com/blackwhitebear8/Jellyfin-STRM-Audio/releases/download/v1.0.12.0/strm-audio_1.0.12.0.zip",
-                "checksum": "<md5 from build-release.sh>",
-                "timestamp": "<timestamp from build-release.sh>"
+                "checksum": "5bfcdadb2b69157c11cce8e19ba9217d",
+                "timestamp": "2026-07-27T18:50:18Z"
             }
         ]
     }
