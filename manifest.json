@@ -1,0 +1,21 @@
+[
+    {
+        "guid": "a0e614d9-608e-4d7a-94de-8f1e3328a1ca",
+        "name": "STRM Audio",
+        "description": "Makes .strm files playable for audio (music/radio), like in Emby. The server fetches the stream and forwards it to clients.",
+        "overview": "Make STRM files playable in music libraries",
+        "owner": "blackwhitebear8",
+        "category": "General",
+        "imageUrl": "https://raw.githubusercontent.com/blackwhitebear8/Jellyfin-STRM-Audio/main/logo.png",
+        "versions": [
+            {
+                "version": "1.0.12.0",
+                "changelog": "Settings page in the dashboard; in-process reconnect proxy; default reconnect window 300s.",
+                "targetAbi": "10.11.0.0",
+                "sourceUrl": "https://github.com/blackwhitebear8/Jellyfin-STRM-Audio/releases/download/v1.0.12.0/strm-audio_1.0.12.0.zip",
+                "checksum": "<md5 from build-release.sh>",
+                "timestamp": "<timestamp from build-release.sh>"
+            }
+        ]
+    }
+]

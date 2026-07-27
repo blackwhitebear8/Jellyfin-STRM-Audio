@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>STRM Audio</title>
+</head>
+<body>
+<div id="StrmAudioConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox">
+    <div data-role="content">
+        <div class="content-primary">
+            <form id="StrmAudioConfigForm">
+                <div class="verticalSection">
+                    <h2 class="sectionTitle">STRM Audio</h2>
+                    <div class="fieldDescription" style="margin-bottom: 1.5em;">
+                        Settings apply immediately to new playback sessions; no server restart required.
+                    </div>
+                </div>
+
+                <div class="checkboxContainer checkboxContainer-withDescription">
+                    <label>
+                        <input is="emby-checkbox" type="checkbox" id="EnableReconnect" />
+                        <span>Enable resilient stream proxy (automatic reconnect)</span>
+                    </label>
+                    <div class="fieldDescription checkboxFieldDescription">
+                        When enabled, the server fetches the stream and automatically reconnects
+                        when it drops. When disabled, the target URL is fetched directly without
+                        reconnect support.
+                    </div>
+                </div>
+
+                <div class="inputContainer">
+                    <input is="emby-input" type="number" id="ReconnectWindowSeconds" label="Reconnect window (seconds)" min="1" step="1" />
+                    <div class="fieldDescription">
+                        How long to keep retrying a dropped upstream stream before giving up and
+                        cutting off client playback. Default: 300.
+                    </div>
+                </div>
+
+                <div class="inputContainer">
+                    <input is="emby-input" type="number" id="UpstreamConnectTimeoutSeconds" label="Upstream connect timeout (seconds)" min="1" step="1" />
+                    <div class="fieldDescription">
+                        Timeout for connecting to the upstream stream and receiving response
+                        headers. Default: 15.
+                    </div>
+                </div>
+
+                <div class="inputContainer">
+                    <input is="emby-input" type="number" id="ReadTimeoutSeconds" label="Read timeout (seconds)" min="1" step="1" />
+                    <div class="fieldDescription">
+                        Maximum time to wait for new data on an open connection before treating
+                        it as stalled and reconnecting. Default: 20.
+                    </div>
+                </div>
+
+                <div>
+                    <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                        <span>Save</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        (function () {
+            var pluginId = 'a0e614d9-608e-4d7a-94de-8f1e3328a1ca';
+
+            function loadConfig(page) {
+                Dashboard.showLoadingMsg();
+                ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                    page.querySelector('#EnableReconnect').checked = config.EnableReconnect !== false;
+                    page.querySelector('#ReconnectWindowSeconds').value = config.ReconnectWindowSeconds || 300;
+                    page.querySelector('#UpstreamConnectTimeoutSeconds').value = config.UpstreamConnectTimeoutSeconds || 15;
+                    page.querySelector('#ReadTimeoutSeconds').value = config.ReadTimeoutSeconds || 20;
+                    Dashboard.hideLoadingMsg();
+                });
+            }
+
+            document.querySelector('#StrmAudioConfigPage').addEventListener('pageshow', function () {
+                loadConfig(this);
+            });
+
+            document.querySelector('#StrmAudioConfigForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                Dashboard.showLoadingMsg();
+
+                var page = document.querySelector('#StrmAudioConfigPage');
+                ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                    config.EnableReconnect = page.querySelector('#EnableReconnect').checked;
+                    config.ReconnectWindowSeconds = parseInt(page.querySelector('#ReconnectWindowSeconds').value, 10) || 300;
+                    config.UpstreamConnectTimeoutSeconds = parseInt(page.querySelector('#UpstreamConnectTimeoutSeconds').value, 10) || 15;
+                    config.ReadTimeoutSeconds = parseInt(page.querySelector('#ReadTimeoutSeconds').value, 10) || 20;
+
+                    ApiClient.updatePluginConfiguration(pluginId, config).then(function (result) {
+                        Dashboard.processPluginConfigurationUpdateResult(result);
+                    });
+                });
+
+                return false;
+            });
+        })();
+    </script>
+</div>
+</body>
+</html>
